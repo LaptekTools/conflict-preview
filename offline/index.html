@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; worker-src 'self'; manifest-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Conflict Preview · Laptek Tools</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:#1b2736;font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1040px;margin:auto;padding:32px 28px 60px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:56px}.brand{display:flex;align-items:center;gap:12px;font-weight:650}.mark{background:#263e52;color:white;width:36px;height:36px;border-radius:10px;display:grid;place-items:center}.pill{font-size:12px;letter-spacing:.08em;border:1px solid #c6d7d4;color:#3c625c;background:#eef5f2;border-radius:30px;padding:5px 12px}h1{font-size:clamp(30px,5vw,48px);line-height:1.12;letter-spacing:-.035em;margin:12px 0 18px}h2{font-size:20px;margin:0 0 8px}p{margin:0 0 14px}.intro{max-width:700px;color:#536272;font-size:18px}.eyebrow{font-size:12px;font-weight:650;letter-spacing:.08em;color:#607486;text-transform:uppercase}.panel{background:white;border:1px solid #dce3e9;border-radius:18px;padding:24px;margin-top:28px;box-shadow:0 5px 16px #14263805}.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px}button,.pick{font:inherit;font-weight:600;cursor:pointer;border:1px solid #cbd5dd;background:#fff;color:#263e52;border-radius:10px;padding:11px 18px;display:inline-block}button.primary,.pick{color:white;background:#263e52;border-color:#263e52}button:hover,.pick:hover{filter:brightness(.94)}button:focus-visible,.pick:focus-within{outline:3px solid #82a8c3;outline-offset:3px}button:disabled{opacity:.45;cursor:default}input[type=file]{position:absolute;width:1px;height:1px;opacity:0}.muted{color:#657384;font-size:14px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}.step b{display:block;margin-bottom:6px}.step{font-size:14px;color:#59697a}.num{color:#90a2af;display:block;font-size:12px;font-weight:650;margin-bottom:6px}#notice{margin-top:20px;white-space:pre-wrap}#notice.error{color:#993e32}#results:empty{display:none}.group{border-top:1px solid #e1e7ec;padding:22px 0}.group:first-child{border-top:0}.group-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:8px}.group-name{overflow-wrap:anywhere;font-weight:650}.badge{font-size:12px;font-weight:650;border-radius:20px;padding:4px 10px;white-space:nowrap;background:#edf1f5;color:#52677b}.badge.identical_bytes{background:#e9f3ed;color:#38684d}.badge.different_bytes{background:#fff2de;color:#87612c}.versions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;font-size:13px}.versions .filename{overflow-wrap:anywhere}.version-state{color:#5c6e7c;text-align:right}.scope{margin-top:32px;border-left:3px solid #d7e1e7;padding-left:18px}.scope p{font-size:14px;color:#596a79}footer{margin-top:38px;font-size:12px;color:#738392}.off{display:none!important}@media(max-width:620px){main{padding:24px 18px 40px}header{margin-bottom:36px}.panel{padding:18px}.steps{grid-template-columns:1fr;gap:16px}.group-head{flex-direction:column;gap:8px}.versions{grid-template-columns:1fr}.version-state{text-align:left;margin-bottom:8px}.intro{font-size:16px}}
+</style><link rel="manifest" href="manifest.webmanifest"></head><body><main>
+<header><div class="brand"><span class="mark" aria-hidden="true">L</span>Laptek Tools</div><span class="pill">LOCAL PREVIEW</span></header>
+<div class="eyebrow">Conflict Preview · Research version</div>
+<h1>See what differs.<br>Keep every version.</h1>
+<p class="intro">Review Syncthing conflict copies in small batches. Find identical copies, different content and files that need a closer look before you open a comparison tool.</p>
+<section class="panel" aria-labelledby="select-title"><h2 id="select-title">Start with a copied batch</h2>
+<p class="muted">Select the original and its conflict copies from one folder. This page reads your selection locally. It does not upload, merge, rename or delete files.</p>
+<div class="actions"><label class="pick">Choose files<input id="files" type="file" multiple aria-label="Choose original and Syncthing conflict files from one folder"></label><button id="demo">Try a fictional example</button><button id="stop" class="off">Stop</button><button id="download" disabled>Save report</button></div>
+<div id="notice" role="status" aria-live="polite">No files selected. The example uses made-up notes.</div>
+<div id="results"></div></section>
+<div class="steps"><div class="step"><span class="num">01 / SELECT</span><b>Include the original</b>Keep filenames intact and use a copied, stable batch from one folder.</div><div class="step"><span class="num">02 / REVIEW</span><b>Check the exceptions</b>Unreadable and unsupported files stay visible. A failed read never becomes an empty file.</div><div class="step"><span class="num">03 / DECIDE</span><b>You choose the version</b>Open differing files in your comparison tool. A newer date does not prove better content.</div></div>
+<section class="scope"><h2>What this preview can tell you</h2><p>It recognizes a strict Syncthing conflict-name format and compares selected UTF-8 file bytes. Limits: 200 files, 4 MiB per file, 24 MiB per selection. Binary, non-UTF-8 and unfamiliar names need manual review. Dropbox names are not supported.</p><p>“Identical bytes” applies to the selected snapshots, not your live sync folder. Filenames are grouping hints, not verified history. No automatic winner or merge. The JSON report contains filenames, sizes and hashes; keep it private if those names are sensitive.</p></section>
+<section class="panel" aria-labelledby="offline-title"><h2 id="offline-title">Use this tool offline</h2>
+<p class="muted">After one successful online visit, this browser can keep a copy of the tool for later. Your selected files and comparison reports are not saved in that copy. Clearing browser data removes offline availability.</p>
+<p id="offline-state" role="status" aria-live="polite">Checking offline availability...</p>
+<div class="actions"><button id="offline-update">Check for updates</button><button id="offline-remove">Remove offline copy</button></div>
+<p class="muted">To keep it handy, use your browser's Install option if available. Otherwise bookmark this page. Installation options differ between browsers.</p></section><footer>Laptek Tools · Local mechanism preview. Not a sync repair service.<details><summary>Privacy and licence</summary><p>Comparisons run in this page. No account, analytics, advertising, purchase or file upload. The hosting provider can log ordinary page and update requests, including IP addresses. Application assets are stored in this browser for offline use; selected file data and reports stay in page memory until you choose to download a report. A saved report can contain sensitive filenames. Browser cache is not a backup.</p><pre style="white-space:pre-wrap">MIT License
+
+Copyright (c) 2026 LaptekTools
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</pre></details></footer>
+</main><script>/* Independent local research implementation. No network or filesystem writes. */
+(function (scope) {
+  'use strict';
+  const LIMITS = Object.freeze({ files: 200, fileBytes: 4 * 1024 * 1024, totalBytes: 24 * 1024 * 1024 });
+  class ScanError extends Error {
+    constructor(code) { super(code); this.code = code; }
+  }
+  function cancelled(signal) { if (signal && signal.aborted) throw new ScanError('cancelled'); }
+  function parseName(name) {
+    const match = /^(.*)\.sync-conflict-(\d{8})-(\d{6})-([A-Z2-7]{7})(\.[^.]*)?$/.exec(name);
+    if (!match || !match[1] || match[1].includes('.sync-conflict-')) return null;
+    const d = match[2], t = match[3];
+    const parts = [+d.slice(0, 4), +d.slice(4, 6), +d.slice(6, 8), +t.slice(0, 2), +t.slice(2, 4), +t.slice(4, 6)];
+    const date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]));
+    if (date.getUTCFullYear() !== parts[0] || date.getUTCMonth() + 1 !== parts[1] || date.getUTCDate() !== parts[2] || date.getUTCHours() !== parts[3] || date.getUTCMinutes() !== parts[4] || date.getUTCSeconds() !== parts[5]) return null;
+    return { base: match[1] + (match[5] || ''), deviceHint: match[4], nameDateHint: d + '-' + t };
+  }
+  async function readMember(file, signal) {
+    cancelled(signal);
+    const item = { name: file.name, size: file.size, status: 'pending' };
+    if (file.size > LIMITS.fileBytes) return { ...item, status: 'too_large' };
+    const before = [file.size, file.lastModified];
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      cancelled(signal);
+      if (bytes.byteLength !== before[0] || file.size !== before[0] || file.lastModified !== before[1]) return { ...item, status: 'changed_input' };
+      const hash = new Uint8Array(await scope.crypto.subtle.digest('SHA-256', bytes));
+      cancelled(signal);
+      item.sha256 = Array.from(hash, b => b.toString(16).padStart(2, '0')).join('');
+      if (bytes.includes(0)) return { ...item, status: 'opaque_content' };
+      let text;
+      try { text = new TextDecoder('utf-8', { fatal: true }).decode(bytes); }
+      catch (_) { return { ...item, status: 'invalid_utf8' }; }
+      return { ...item, status: 'readable_utf8', lines: text ? text.split(/\r\n|\r|\n/).length : 0 };
+    } catch (error) {
+      if (error instanceof ScanError) throw error;
+      return { ...item, status: 'read_error' }; // Never substitute empty content.
+    }
+  }
+  async function scan(selection, options = {}) {
+    const files = Array.from(selection);
+    cancelled(options.signal);
+    if (files.length > LIMITS.files) throw new ScanError('file_count_limit');
+    if (files.some(f => !f || typeof f.name !== 'string' || /[\\/]/.test(f.name) || !Number.isSafeInteger(f.size) || f.size < 0 || typeof f.arrayBuffer !== 'function')) throw new ScanError('invalid_input');
+    if (files.reduce((sum, f) => sum + f.size, 0) > LIMITS.totalBytes) throw new ScanError('total_bytes_limit');
+    const seen = new Map();
+    for (const file of files) {
+      const lower = file.name.toLowerCase();
+      if (seen.has(lower)) throw new ScanError(seen.get(lower) === file.name ? 'duplicate_name' : 'case_collision');
+      seen.set(lower, file.name);
+    }
+    const byName = new Map(files.map(f => [f.name, f]));
+    const groups = new Map(), unrecognized = [];
+    for (const file of files) {
+      const parsed = parseName(file.name);
+      if (parsed) {
+        if (!groups.has(parsed.base)) groups.set(parsed.base, []);
+        groups.get(parsed.base).push(file);
+      } else if (file.name.includes('.sync-conflict-')) unrecognized.push(file.name);
+    }
+    const results = [];
+    let reads = 0;
+    for (const base of Array.from(groups.keys()).sort()) {
+      cancelled(options.signal);
+      const original = byName.get(base);
+      const list = groups.get(base).slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+      const members = [];
+      if (original) list.unshift(original);
+      for (const file of list) {
+        members.push(await readMember(file, options.signal));
+        reads++;
+        if (options.onProgress) options.onProgress(reads);
+      }
+      let status;
+      if (!original) status = 'missing_base';
+      else if (members.some(m => m.status !== 'readable_utf8')) status = 'needs_review';
+      else status = members.every(m => m.sha256 === members[0].sha256) ? 'identical_bytes' : 'different_bytes';
+      results.push({ base, status, members });
+    }
+    cancelled(options.signal);
+    return { format: 'conflict-preview-v1', inputKind: 'explicit_selected_snapshots', supported: 'strict_syncthing_name_subset_utf8', selectedFiles: files.length, readAttempts: reads, unrecognized: unrecognized.sort(), groups: results, resolution: 'unknown_user_decision_required', sourceWrites: 0 };
+  }
+  scope.ConflictPreview = Object.freeze({ scan, parseName, LIMITS, ScanError });
+  if (typeof module !== 'undefined') module.exports = scope.ConflictPreview;
+})(globalThis);
+</script><script>
+'use strict';
+const $=id=>document.getElementById(id);let controller=null,lastReport=null,runId=0;
+const labels={identical_bytes:'Identical bytes',different_bytes:'Content differs',missing_base:'Original not selected',needs_review:'Needs manual review'};
+const memberLabels={readable_utf8:'UTF-8 · read',read_error:'Could not read',changed_input:'Input changed · select again',too_large:'Above 4 MiB limit',opaque_content:'Binary / opaque',invalid_utf8:'Not valid UTF-8'};
+function el(tag,text,cls){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;if(cls)node.className=cls;return node;}
+function render(report,demo){$('results').replaceChildren();for(const group of report.groups){const card=el('section',undefined,'group'),head=el('div',undefined,'group-head');head.append(el('span',group.base,'group-name'),el('span',labels[group.status],'badge '+group.status));card.append(head);const versions=el('div',undefined,'versions');for(const member of group.members){versions.append(el('span',member.name,'filename'),el('span',memberLabels[member.status]+' · '+member.size+' B','version-state'));}card.append(versions);$('results').append(card);}const counts=report.groups.reduce((x,g)=>(x[g.status]=(x[g.status]||0)+1,x),{});$('notice').className='';$('notice').textContent=(demo?'FICTIONAL EXAMPLE · ':'')+report.groups.length+' group(s) · '+(counts.identical_bytes||0)+' identical · '+(counts.different_bytes||0)+' different · '+((counts.missing_base||0)+(counts.needs_review||0))+' need review.'+(report.unrecognized.length?' '+report.unrecognized.length+' unfamiliar conflict name(s) were not grouped.':'')+(report.groups.length?'':' Include the original and at least one correctly named conflict copy.');if(report.unrecognized.length){const box=el('section',undefined,'group');box.append(el('b','Unrecognized names'));for(const name of report.unrecognized)box.append(el('div',name,'muted filename'));$('results').append(box);}}
+async function run(files,demo=false){if(controller)controller.abort();const id=++runId;controller=new AbortController();lastReport=null;$('download').disabled=true;$('results').replaceChildren();$('stop').classList.remove('off');$('notice').className='';$('notice').textContent='Reading selected snapshots…';try{const report=await ConflictPreview.scan(files,{signal:controller.signal,onProgress:n=>{if(id===runId)$('notice').textContent='Read '+n+' file snapshot(s)…';}});if(id!==runId)return;report.fictionalExample=demo;lastReport=report;render(report,demo);$('download').disabled=false;}catch(error){if(id!==runId)return;const messages={cancelled:'Stopped. No files were changed. Select files or try the example to start again.',duplicate_name:'Duplicate names: select files from a single folder. No report was produced.',case_collision:'Names differ only by case. Resolve the naming ambiguity manually; no report was produced.',file_count_limit:'Select at most 200 files.',total_bytes_limit:'Selection exceeds 24 MiB. Choose a smaller batch.',invalid_input:'This selection is unsupported. Choose a copied batch of files.'};$('notice').className=error.code==='cancelled'?'':'error';$('notice').textContent=messages[error.code]||'The browser could not complete this preview. No files were changed.';}finally{if(id===runId){$('stop').classList.add('off');controller=null;}}}
+$('files').addEventListener('change',event=>{run(Array.from(event.target.files));event.target.value='';});
+$('stop').addEventListener('click',()=>{if(controller)controller.abort();});
+$('demo').addEventListener('click',()=>{const make=(n,text)=>new File([text],n,{type:'text/plain',lastModified:0});run([make('meeting.txt','Bring the printed agenda.\n'),make('meeting.sync-conflict-20261007-030001-ABCDEFG.txt','Bring the printed agenda.\n'),make('ideas.txt','First draft\n'),make('ideas.sync-conflict-20261007-030002-ABCDEFG.txt','Second draft\n'),make('missing.sync-conflict-20261007-030003-ABCDEFG.txt','Original not selected\n')],true);});
+$('download').addEventListener('click',()=>{if(!lastReport)return;const url=URL.createObjectURL(new Blob([JSON.stringify(lastReport,null,2)+'\n'],{type:'application/json'}));const a=el('a');a.href=url;a.download=lastReport.fictionalExample?'fictional-conflict-preview.json':'conflict-preview.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+</script><script>
+(() => {
+ const scope=new URL('./',location.href).href;
+ const prefix='laptek-conflict-offline:'+location.origin+':'+new URL(scope).pathname+':';
+ const message=document.getElementById('offline-state');
+ const update=document.getElementById('offline-update');
+ const remove=document.getElementById('offline-remove');
+ let registration;
+ async function ours(){const r=await navigator.serviceWorker.getRegistration(scope);return r&&r.scope===scope?r:null;}
+ async function ready(){
+   const keys=(await caches.keys()).filter(n=>n.startsWith(prefix));
+   if(registration?.waiting){message.textContent='Update ready. Close all tabs of this tool and reopen it to use the new version.';return;}
+   message.textContent=registration?.active&&keys.length?'Offline copy ready in this browser.':'Offline copy is not ready yet. Keep an online connection for now.';
+ }
+ async function start(){
+   if(!('serviceWorker' in navigator)||!('caches' in window)){message.textContent='This browser cannot keep an offline copy. You can still use the tool online.';update.disabled=remove.disabled=true;return;}
+   try{
+     registration=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
+     if(registration.installing)await installed(registration.installing);
+     await ready();
+   }catch(e){message.textContent='An offline copy could not be prepared. Keep an online connection, or use your previously saved copy.';}
+ }
+ function installed(candidate){return new Promise((resolve,reject)=>{
+   const timer=setTimeout(()=>{candidate.removeEventListener('statechange',changed);reject(new Error('Not confirmed'));},10000);
+   function changed(){if(['installed','activated','redundant'].includes(candidate.state)){clearTimeout(timer);candidate.removeEventListener('statechange',changed);candidate.state==='redundant'?reject(new Error('Rejected')):resolve();}}
+   candidate.addEventListener('statechange',changed);changed();
+ });}
+ update.addEventListener('click',async()=>{
+   update.disabled=true;
+   try{registration=await ours();if(!registration)throw new Error('No offline copy');await registration.update();if(registration.installing)await installed(registration.installing);await ready();}
+   catch(e){message.textContent='Updates are unavailable right now. Your existing copy was kept.';}
+   finally{update.disabled=false;}
+ });
+ remove.addEventListener('click',async()=>{
+   remove.disabled=update.disabled=true;
+   try{const r=await ours();if(r)await r.unregister();for(const k of await caches.keys())if(k.startsWith(prefix))await caches.delete(k);message.textContent='Offline copy removed. Close this tab. An online visit is needed to prepare another copy.';}
+   catch(e){message.textContent='The offline copy could not be removed. You can also clear this site in your browser settings.';remove.disabled=update.disabled=false;}
+ });
+ navigator.serviceWorker?.addEventListener('controllerchange',()=>ready().catch(()=>{}));
+ start();
+})();
+</script></body></html>
